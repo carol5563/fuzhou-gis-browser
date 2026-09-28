@@ -1,0 +1,35 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [119.388263, 26.027506]
+            },
+            "properties": {
+                "name": "福州地名1"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [119.35, 26.03]
+            },
+            "properties": {
+                "name": "福州地名2"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [119.32, 26.05]
+            },
+            "properties": {
+                "name": "福州地名3"
+            }
+        }
+    ]
+}

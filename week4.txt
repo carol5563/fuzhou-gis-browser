@@ -1,0 +1,125 @@
+OGC服务标准（WMS / WMTS / WFS）速查卡
+一句话说清三兄弟
+服务	返回什么	一句话人话
+WMS	图片（PNG/JPEG）	服务端现场画好一张图，发图片给你
+WMTS	图片瓦片（PNG/JPEG）	图提前画好了切成小方块，按需发给你
+WFS	矢量数据（GeoJSON/GML）	直接把数据（坐标和属性）发给你，你自己画     
+WMS（Web Map Service）
+核心特点：动态出图
+每次请求时，服务端根据你指定的范围、大小、图层，实时渲染成一张图片返回。
+请求示例（GetMap）：
+http://example.com/wms?
+  SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&
+  LAYERS=行政区&
+  BBOX=118.0,25.5,120.0,27.0&    ← 要的范围（经纬度）
+  WIDTH=800&HEIGHT=600&           ← 图片尺寸
+  CRS=EPSG:4326&
+  FORMAT=image/png
+
+三大核心操作：
+GetCapabilities — 问服务器「你有什么图层？」（元数据）
+
+GetMap — 给我一张图（核心）
+
+GetFeatureInfo（可选）— 我点了一下图，告诉我那个位置有什么属性
+
+优点：灵活（想画什么画什么、想怎么画怎么画）；数据永远是最新的。
+缺点：慢（每次实时渲染，并发高时服务器扛不住）；交互差（点一下要等服务器响应）。
+
+适用场景：数据实时性强、图层经常变化、用户少/内部系统。
+
+WMTS（Web Map Tile Service）
+核心特点：预切片（静态瓦片）
+
+图提前切成 256x256 的小方块存好，请求时直接发对应的瓦片。
+
+请求示例（GetTile）：
+
+http://example.com/wmts?
+  SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&
+  LAYER=行政区&
+  TILEMATRIXSET=EPSG:3857&
+  TILEMATRIX=10&                  ← 缩放级别（对应z）
+  TILEROW=512&TILECOL=345&        ← 行列号（对应y和x）
+  FORMAT=image/png
+核心操作：
+
+GetCapabilities — 问服务器「你有哪些切片规则？」
+
+GetTile — 给我第z级第x列第y行的瓦片（核心）
+
+优点：极快（只管发文件，不用算）；并发能力极强（静态文件/CDN）。
+缺点：不灵活（改样式要重新切片）；数据更新要重新切。
+
+适用场景：底图、不常变化的图层、高并发/公众访问、移动端。
+
+WFS（Web Feature Service）
+核心特点：返回矢量数据（而非图片）
+
+客户端直接拿到要素的坐标和属性，自己负责渲染。
+
+请求示例（GetFeature）：
+http://example.com/wfs?
+  SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&
+  TYPENAMES=poi&
+  BBOX=119.0,26.0,119.5,26.5&
+  OUTPUTFORMAT=application/json
+
+三大核心操作：
+GetCapabilities — 问服务器「你有什么数据？」
+
+GetFeature — 给我数据（核心，返回 GeoJSON/GML/Shapefile）
+
+Transaction（可选）— 增删改数据（写操作）
+
+优点：客户端可自由控制样式、交互（点击/悬停/筛选）极其灵活；数据可编辑。
+缺点：数据量可能很大（传输慢）；暴露原始坐标（安全性要考虑）；客户端渲染压力大。
+
+适用场景：高交互应用（点击弹窗/动态样式）、数据编辑类系统、需要离线/导出数据。
+
+两大对比表（面试必考）
+对比一：WMS vs WMTS
+维度	WMS	WMTS
+渲染时机	实时渲染（每次请求重新画）	预渲染（提前切好瓦片存着）
+返回内容	一整张大图	256x256的小瓦片
+性能	慢（渲染耗CPU）	快（只读文件/CDN）
+灵活性	高（样式任意改）	低（改样式要重切）
+数据实时性	高（最新数据）	低（切完就固定了）
+存储	不存图	存海量瓦片文件
+对比二：WMS/WMTS vs WFS
+维度	WMS / WMTS	WFS
+返回什么	图片（人眼看）	数据（机器读）
+客户端能改样式吗	不能（服务端画好啥样就啥样）	能（自己拿到数据随便画）
+能点击查属性吗	WMS可以（GetFeatureInfo，但慢）	可以（原生支持，交互丝滑）
+数据量	小（就一张图）	可能很大（全量数据）
+安全	数据不暴露（只给图片）	数据全暴露（坐标/属性都给你了）
+面试高频题及答案
+Q1：WMS和WMTS的核心区别是什么？
+
+A：WMS是动态出图——每次请求服务器实时渲染一张图片返回；WMTS是预切片——图提前切好存成瓦片，请求时直接返回文件。WMS灵活但慢，WMTS快但不灵活。 底图用WMTS，实时分析图层用WMS。
+
+Q2：WMS和WFS有什么区别？ （面试常考）
+
+A：WMS返回图片（人眼直接看），WFS返回矢量数据（经纬度+属性）。WMS是「看图」，WFS是「拿数据」。选WFS是因为客户端可以自由控制样式、做高交互（点击弹窗/悬停高亮），但数据量大时性能压力在客户端。
+
+Q3：为什么地图底图通常用WMTS而不是WMS？
+
+A：底图全球范围、风格固定、不常更新，用WMTS预切好后直接发文件，CDN加速、并发能力极强；用WMS每刷新一次都实时渲染，服务器扛不住。
+
+Q4：什么场景必须用WFS？
+
+A：需要点击要素弹窗显示属性、需要动态按值着色（比如区县按人口红绿渐变）、需要在线编辑数据——这些都要拿到原始数据才能在客户端实现，图片（WMS/WMTS）做不到。
+
+一个表格帮你记住访问地址
+
+WMS 的 GetMap：   ?SERVICE=WMS&REQUEST=GetMap&LAYERS=xxx&BBOX=...
+WMTS 的 GetTile： ?SERVICE=WMTS&REQUEST=GetTile&LAYER=xxx&TILEROW=...&TILECOL=...
+WFS 的 GetFeature：?SERVICE=WFS&REQUEST=GetFeature&TYPENAMES=xxx&BBOX=...
+共同点：都有 GetCapabilities（服务器自我介绍），这是OGC服务的"说明书"。
+
+大脑联想记忆法
+WMS = 现画现卖（你点菜，厨师现炒）
+
+WMTS = 预制菜（提前做好，微波炉热一下就行）
+
+WFS = 把菜谱给你（你自己回家做，想放什么调料都行）

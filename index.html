@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ol-week1</title>
+    <style>
+      .map-btns, .tool-bar {
+        position: absolute;
+        top: 20px;
+        left: 60px;
+        z-index: 1;
+      }
+      .tool-bar {
+        display: flex;
+        gap: 10px;
+      }
+      .ol-popup {
+        position: absolute;
+        background-color: white;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #cccccc;
+        bottom: 12px;
+        left: -50px;
+        min-width: 280px;
+      }
+      .ol-popup:after,
+      .ol-popup:before {
+        top: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+      }
+      .ol-popup:after {
+        border-top-color: white;
+        border-width: 10px;
+        left: 48px;
+        margin-left: -10px;
+      }
+      .ol-popup:before {
+        border-top-color: #cccccc;
+        border-width: 11px;
+        left: 48px;
+        margin-left: -11px;
+      }
+      .ol-popup-closer {
+        text-decoration: none;
+        position: absolute;
+        top: 2px;
+        right: 8px;
+      }
+      .ol-popup-closer:after {
+        content: "✖";
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" style="height: 100vh">
+      <div id="popup" class="ol-popup">
+        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+        <div id="popup-content"></div>
+      </div>
+      <!-- <div class="map-btns">
+        <button id="gdSatelliteBtn">高德影像</button>
+      <button id="gdRoadBtn">高德道路</button>
+      <button id="tiandituBtn">天地图</button>
+      </div> -->
+      <div class="tool-bar">
+        <div>
+          <input type="checkbox" id="gdSatellite" name="gdSatellite" checked />
+          <label for="gdSatellite">高德影像</label>
+        </div>
+        <div>
+          <input type="checkbox" id="gdRoad" name="gdRoad" />
+          <label for="gdRoad">高德道路</label>
+        </div>
+        <div>
+          <input type="checkbox" id="gdAnnotation" name="gdAnnotation" checked />
+          <label for="gdAnnotation">高德注记</label>
+        </div>
+
+        <div>
+          <input type="checkbox" id="tianditu" name="tianditu" />
+          <label for="tianditu">天地图</label>
+        </div>
+        <div>
+          <input type="checkbox" id="tiandituAnnotation" name="tiandituAnnotation" />
+          <label for="tiandituAnnotation">天地图注记</label>
+        </div>
+
+        <div>
+          <input type="checkbox" id="geoVector" name="geoVector" checked />
+          <label for="geoVector">几何轮廓</label>
+        </div>
+
+        <div>
+          <input type="checkbox" id="geoMarker" name="geoMarker" checked />
+          <label for="geoMarker">标记点</label>
+        </div>
+        
+
+        <div>
+          <input
+            type="range"
+            id="opacity"
+            name="opacity"
+            min="0"
+            max="1"
+            step="0.1"
+            value="1"
+          />
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

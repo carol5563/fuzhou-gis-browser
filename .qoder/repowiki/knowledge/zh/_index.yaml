@@ -1,0 +1,21 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: zh-CN
+branch: Q0DeR-MaG1C-BrAnCh-Fo2-NoN-GiT-Or-No-C0MmIt
+nodes_managed: true
+exported_at: "2026-07-31T22:16:14Z"
+modules:
+    "":
+        dir_name: OpenLayers 第一周学习项目（福州地图浏览器 v0.1）
+        title: OpenLayers 第一周学习项目（福州地图浏览器 v0.1）
+        scope:
+            - README.md
+            - .gitignore
+            - index.html
+            - package.json
+            - pnpm-lock.yaml
+            - GIS学习计划-刘珊.md
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []

@@ -1,0 +1,13 @@
+schema_version: 1
+module_path: ""
+title: OpenLayers 第一周学习项目（福州地图浏览器 v0.1）
+scope:
+    - README.md
+    - .gitignore
+    - index.html
+    - package.json
+    - pnpm-lock.yaml
+    - GIS学习计划-刘珊.md
+source_files: []
+depends_on: []
+related_to: []
