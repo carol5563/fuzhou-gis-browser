@@ -1,15 +1,16 @@
 {
 	"folders": [
 		{
+			"name": "cesium-month3",
+			"path": "../cesium-month3"
+		},
+		{
 			"name": "cesium-month2",
 			"path": "../cesium-month2"
 		},
 		{
 			"name": "ol-week1",
 			"path": "."
-		},
-		{
-			"path": "../cesium-month3"
 		}
 	],
 	"settings": {}
