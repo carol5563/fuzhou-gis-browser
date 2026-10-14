@@ -268,7 +268,7 @@ const map = new Map({
   })
 })
 
-fetch("/data/fuzhou.geojson").then(res => res.json()).then(data => {
+fetch("data/fuzhou.geojson").then(res => res.json()).then(data => {
   geoObject = data;
   geoVectorLayer = new VectorLayer({
     source: new VectorSource({
